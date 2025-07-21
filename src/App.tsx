@@ -1,48 +1,57 @@
-import React, { lazy, Suspense } from 'react';
-import { Routes, Route } from 'react-router-dom';
-import { AnimatePresence } from 'framer-motion';
-
-// Layout components
-import Layout from './components/layout/Layout';
-import LoadingSpinner from './components/common/LoadingSpinner';
-
-// Lazy loaded pages
-const HomePage = lazy(() => import('./pages/HomePage'));
-const AuthPage = lazy(() => import('./pages/AuthPage'));
-const ProfilePage = lazy(() => import('./pages/ProfilePage'));
-const ChatRoomsPage = lazy(() => import('./pages/ChatRoomsPage'));
-const ResourcesPage = lazy(() => import('./pages/ResourcesPage'));
-const CalendarPage = lazy(() => import('./pages/CalendarPage'));
-const VRRoomPage = lazy(() => import('./pages/VRRoomPage'));
-const NotFoundPage = lazy(() => import('./pages/NotFoundPage'));
+import React, { useState } from 'react';
+import Header from './components/Header';
+import UserProfileForm from './components/UserProfileForm';
+import ResultsView from './components/ResultsView';
+import HowItWorks from './components/HowItWorks';
+import Footer from './components/Footer'; // Import the Footer component
+import { UserProfile, GeneratedIdea } from './types/business';
+import { BusinessMatcher } from './utils/businessMatcher';
 
 function App() {
-  return (
-    <AnimatePresence mode="wait">
-      <Suspense fallback={<LoadingScreen />}>
-        <Routes>
-          <Route path="/" element={<Layout />}>
-            <Route index element={<HomePage />} />
-            <Route path="auth" element={<AuthPage />} />
-            <Route path="profile" element={<ProfilePage />} />
-            <Route path="chat-rooms" element={<ChatRoomsPage />} />
-            <Route path="resources" element={<ResourcesPage />} />
-            <Route path="calendar" element={<CalendarPage />} />
-            <Route path="vr-room/:roomId" element={<VRRoomPage />} />
-            <Route path="*" element={<NotFoundPage />} />
-          </Route>
-        </Routes>
-      </Suspense>
-    </AnimatePresence>
-  );
-}
+  const [currentView, setCurrentView] = useState<'form' | 'results'>('form');
+  const [generatedIdeas, setGeneratedIdeas] = useState<GeneratedIdea[]>([]);
 
-const LoadingScreen = () => {
+  const handleProfileSubmit = (profile: UserProfile) => {
+    const ideas = BusinessMatcher.generateIdeas(profile);
+    setGeneratedIdeas(ideas);
+    setCurrentView('results');
+  };
+
+  const handleBackToForm = () => {
+    setCurrentView('form');
+  };
+
   return (
-    <div className="min-h-screen bg-surface-50 flex items-center justify-center">
-      <LoadingSpinner size="large" />
+    <div className="min-h-screen bg-white flex flex-col">
+      <Header />
+
+      <main className="flex-grow">
+        {currentView === 'form' ? (
+          <div className="container mx-auto px-4 py-12">
+            <div className="text-center mb-12">
+              <h2 className="text-4xl font-bold text-gray-900 mb-4">
+                Discover Your Perfect Business Opportunity
+              </h2>
+              <p className="text-xl text-gray-600 max-w-3xl mx-auto">
+                Answer a few questions about your interests, skills, and budget, and our AI will generate 
+                personalized business ideas tailored just for you.
+              </p>
+            </div>
+
+            <UserProfileForm onSubmit={handleProfileSubmit} />
+
+            <div className="mt-16">
+              <HowItWorks />
+            </div>
+          </div>
+        ) : (
+          <ResultsView ideas={generatedIdeas} onBack={handleBackToForm} />
+        )}
+      </main>
+
+      <Footer /> {/* Add Footer component here */}
     </div>
   );
-};
+}
 
 export default App;
