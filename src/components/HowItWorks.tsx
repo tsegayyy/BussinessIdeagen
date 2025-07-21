@@ -24,7 +24,7 @@ const HowItWorks: React.FC = () => {
     <section className="bg-white py-28 px-6">
       <div className="max-w-7xl mx-auto text-center">
         <h2 className="text-4xl font-bold mb-20 text-gray-900"> {/* Changed to dark gray/black */}
-          How BizGenie Works
+          How Infinity Business Ideas Works
         </h2>
         <div className="grid md:grid-cols-3 gap-12">
           {steps.map((step, index) => (

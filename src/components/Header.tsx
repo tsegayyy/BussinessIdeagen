@@ -1,5 +1,5 @@
 import React from 'react';
-import { Lightbulb } from 'lucide-react';
+import { Infinity } from 'lucide-react';
 
 const Header: React.FC = () => {
   return (
@@ -11,11 +11,11 @@ const Header: React.FC = () => {
 
       <div className="relative z-10 max-w-7xl mx-auto px-6">
         <div className="flex items-center justify-center space-x-4">
-          <Lightbulb className="h-10 w-10 text-yellow-400 drop-shadow-lg" />
-          <h1 className="text-5xl font-bold tracking-wide">BizGenie</h1>
+          <Infinity className="h-16 w-16 text-blue-500 drop-shadow-lg" />
+          <h1 className="text-5xl font-bold tracking-wide">Infinity Business Ideas</h1>
         </div>
         <p className="text-center mt-4 text-indigo-200 text-xl font-light">
-          AI-Powered Business Idea Generator
+          Explore Endless AI-Generated Business Possibilities
         </p>
       </div>
     </header>
